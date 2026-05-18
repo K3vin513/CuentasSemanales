@@ -24,7 +24,6 @@ function setType(result, type) {
       total = result * 1;
       return total;
   }
-
   if(type == "Mano"){
       total = result * 0.90;
       return total;
