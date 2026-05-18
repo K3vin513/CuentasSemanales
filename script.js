@@ -204,6 +204,7 @@ function deleteActions(){
         oldFirst = "";
         register = [];
         localStorage.removeItem("registryFiles");
+        localStorage.removeItem("mes");
 
         resultFinal = 0;
             const pasteResult = document.getElementById("finalResult");
