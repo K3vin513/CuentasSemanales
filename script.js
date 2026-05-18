@@ -202,8 +202,8 @@ function deleteActions(){
         newMes = "";
         first = "";
         oldFirst = "";
-        localStorage.clear();
         register = [];
+        localStorage.removeItem("registryFiles");
 
         resultFinal = 0;
             const pasteResult = document.getElementById("finalResult");
@@ -241,28 +241,29 @@ function deleteActions(){
             localStorage.setItem("registryFiles", JSON.stringify(register));
             console.log(resultFinal);
         }
-        else if (numFilas == 1){
+        else{
 
-            const table = document.getElementById("tableFirst");
-            table.style.display = "none";
-            numFilas = 0;
+             const table = document.getElementById("tableFirst");
+        table.style.display = "none";
+        numFilas = 0;
 
-            var titleDate = document.getElementById("titleDate");
-            titleDate.textContent = "";
-            mes = "";
-            newMes = "";
-            oldFirst = "";
-            console.log("llega hasta aca");
-            register.pop();
+        var titleDate = document.getElementById("titleDate");
+        titleDate.textContent = "";
+        mes = "";
+        newMes = "";
+        first = "";
+        oldFirst = "";
+        register = [];
+        localStorage.removeItem("registryFiles");
+        localStorage.removeItem("mes");
 
-            resultFinal = 0;
+        resultFinal = 0;
             const pasteResult = document.getElementById("finalResult");
             pasteResult.textContent = " ";
             localStorage.removeItem("resultFinal");
 
-
-            const tableBody = document.getElementById("tBody");
-            while (tableBody.firstChild) {
+        const tableBody = document.getElementById("tBody");
+        while (tableBody.firstChild) {
             tableBody.removeChild(tableBody.firstChild);
         }
         }
@@ -453,6 +454,7 @@ function getNegative(){
     localStorage.setItem("first", first);
     localStorage.setItem("oldFirst", oldFirst);
     localStorage.setItem("registryFiles", JSON.stringify(register));
+    localStorage.setItem("totalSavedWeek", resultFinal );
  }
 
 
@@ -508,6 +510,60 @@ function getNegative(){
     console.log("Array guardado: " + JSON.stringify(register));
   }
 
+  function getDomingo(){
+
+    const fila = document.createElement("tr");
+    const extraHours = Number(document.getElementById("hours").value);
+
+      fila.innerHTML = `
+       <th></th>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+     `;
+
+    var table = document.getElementById("tBody");
+    var showTable = document.getElementById("tableFirst");
+    showTable.style.display = "table";
+    table.appendChild(fila);
+    numFilas++;
+
+    var resetDate = document.getElementById("date");
+    resetDate.value = "";
+    const showResult = document.getElementById("showResult");
+    showResult.textContent = "";
+
+    // Seleccionar los elementos de la tabla por su ID para actualizar su contenido
+    const celdas = fila.children;
+
+    extraHoursValue(discountedTotal);
+
+    total = total * 2;
+    discountedTotal = discountedTotal * 2;
+
+    //Rellenar las celdas con los datos correspondientes.
+    
+        celdas[0].textContent = dia + " " + first;
+        celdas[1].textContent = type;
+        celdas[2].textContent = typeFruit;
+        celdas[3].textContent = value;
+        celdas[4].textContent = "$" + Math.ceil(total );
+        celdas[5].textContent = "$" + Math.ceil(discountedTotal);
+
+    if(extraHours > 0){
+        celdas[5].textContent = "$" + Math.ceil(discountedTotal) + "*";
+    }
+
+
+    deleteButton();
+    saveArrays();
+    total = 0;
+    value = "";
+    console.log("Array guardado: " + JSON.stringify(register));
+  }
+
   function finalResult(afterDiscount){
 
     console.log("asi queda antes de la suma " + resultFinal);
@@ -519,7 +575,7 @@ function getNegative(){
     console.log("Result final: " + resultFinal);
     pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
     total = 0;
-    discountedTotal = 0;
+
 
     localStorage.setItem("resultFinal", resultFinal);
     return resultFinal;
@@ -550,7 +606,6 @@ function makeWeek(){
 
 if(negativeTest == "true"){
     getNegative();
-    finalResult(discountedTotal);
     selectExtraHoras.selectedIndex = 0;
 }
 
@@ -586,9 +641,13 @@ else{
     alert("Ingrese una cantidad para calcular el resultado y seleccione una fecha antes de guardarlo en la tabla.");
   }
   else if(numFilas > 5){
+    if (dia == "Dom"){
+        getDomingo();
+    }
+    else{
     alert("No se pueden agregar más filas a la tabla");
         deleteButton();
-
- }
+    }
+  }
  }
 } 
