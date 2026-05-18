@@ -46,6 +46,23 @@ function reloadFinalResult(){
 
   }
 
+function reloadFinalResultWeek(index){
+
+    const pasteResult = document.getElementById("totalWeek");
+    const selectedTable = allTables[index];
+    let totalSemana = 0;
+
+    selectedTable.tabla.forEach(item => {
+
+        totalSemana += Number(
+            item.discountedTotal
+        ) || 0;
+    });
+
+    pasteResult.textContent = "Total: $" + Math.ceil(totalSemana);
+
+}
+
 function saveTable(){
 
     allTables.push({
@@ -131,6 +148,8 @@ function recreateWeekSaved(){
 function recreateSavedTable(index){
 
     clearTable();
+    reloadFinalResultWeek(index)
+
 
     const savedTable = allTables[index];
 
