@@ -27,11 +27,24 @@ window.onload = function() {
     console.log(numFilas);
     console.log(first);
     console.log(oldFirst);
+
+    resultFinal = parseFloat(
+                             localStorage.getItem("resultFinal")
+                            ) || 0;
+    reloadFinalResult();
     }
 
-    recreateTableSelect()
+
+    recreateTableSelect();
 }
 
+function reloadFinalResult(){
+
+    const pasteResult = document.getElementById("finalResult");
+    
+    pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
+
+  }
 
 function saveTable(){
 
@@ -105,8 +118,7 @@ function clearTable(){
 function showTable(event) {
 
     const selectedIndex = event.target.value;
-    alert("Selected table: " + selectedIndex);
-        recreateSavedTable(selectedIndex);
+    recreateSavedTable(selectedIndex);
 }
 
 function recreateWeekSaved(){
@@ -147,7 +159,6 @@ function recreateSavedTable(index){
 
     });
 
-    alert("Table saved successfully!");
     document.getElementById("tableSaved")
         .style.display = "table";
     aline.style.backgroundColor = "#dbedfc";
