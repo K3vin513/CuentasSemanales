@@ -499,6 +499,7 @@ function getNegative(){
     if(extraHours > 0){
         celdas[5].textContent = "$" + Math.ceil(discountedTotal) + "*";
     }
+
     oldFirst = first;    
     deleteButton();
     saveArrays();
@@ -509,6 +510,7 @@ function getNegative(){
 
   function finalResult(afterDiscount){
 
+    console.log("asi queda antes de la suma " + resultFinal);
     resultFinal = resultFinal + afterDiscount;
     const pasteResult = document.getElementById("finalResult");
     
@@ -520,6 +522,7 @@ function getNegative(){
     discountedTotal = 0;
 
     localStorage.setItem("resultFinal", resultFinal);
+    return resultFinal;
   }
 
 function makeWeek(){
