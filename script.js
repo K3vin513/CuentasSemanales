@@ -21,7 +21,7 @@ var resultFinal = 0;
 function setType(result, type) {
 
   if(type == "Tijera"){
-      total = result * 1;
+      total = result ;
       return total;
   }
 
@@ -62,13 +62,13 @@ function setQuantity(value, fruit) {
 
 
     if (fruit == "Nar.Base"){
-       if(value <= 55){
+       if(value <= 75){
           result = (value * 16.70) + ficAlViv + descTra;
          return result;
        }
        else {
-           const sum = value - 55;
-           result = (sum * 25.05) + (55 * 16.70) + ficAlViv + descTra;
+           const sum = value - 75;
+           result = (sum * 25.05) + (75 * 16.70) + ficAlViv + descTra;
            return result;
        }
     }
@@ -274,7 +274,6 @@ function deleteActions(){
     // Al seleccionar "guardarFila" se muestra un mensaje de guardado y se guarda en el siguiente div
 
     if(action == "guardarFila"){
-
         if(numFilas < 6){
             alert("Semana Incompleta");
             deleteTable.selectedIndex = 0;
