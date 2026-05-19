@@ -24,6 +24,7 @@ function setType(result, type) {
       total = result * 1;
       return total;
   }
+
   if(type == "Mano"){
       total = result * 0.90;
       return total;
@@ -39,6 +40,7 @@ function setQuantity(value, fruit) {
 
     const ficAlViv = 238.41;
     const descTra = 67.40;
+
 
     if(fruit == "Man.Base"){
 
@@ -75,7 +77,7 @@ function setQuantity(value, fruit) {
 function extraHoursValue(initialResult){
 
    const extraHours = Number(document.getElementById("hours").value);
-    const extraHoursValue = extraHours * 270;
+    const extraHoursValue = extraHours * 220.38;
 
     console.log("Valor de horas extra: " + extraHours);
 
@@ -204,6 +206,7 @@ function deleteActions(){
         register = [];
         localStorage.removeItem("registryFiles");
         localStorage.removeItem("mes");
+
 
         resultFinal = 0;
             const pasteResult = document.getElementById("finalResult");
@@ -428,6 +431,9 @@ function getNegative(){
 
   function saveArrays(){
 
+    const extraHours = Number(document.getElementById("hours").value);
+
+
     if(negativeTest == "true"){
         register.push ({
             fecha : dia + " " + first,
@@ -441,6 +447,23 @@ function getNegative(){
         return;
         }
             
+    if(extraHours > 0){
+        register.push (
+        {
+          fecha : dia + " " + first,
+          type : type,
+          typeFruit : typeFruit,
+          value : value,
+          total : Math.ceil(total),
+          discountedTotal : Math.ceil(discountedTotal) + "*"
+        }
+    );
+    localStorage.setItem("first", first);
+    localStorage.setItem("oldFirst", oldFirst);
+    localStorage.setItem("registryFiles", JSON.stringify(register));
+    localStorage.setItem("totalSavedWeek", resultFinal );
+    return
+    }
     register.push (
         {
           fecha : dia + " " + first,
@@ -451,6 +474,8 @@ function getNegative(){
           discountedTotal : Math.ceil(discountedTotal)
         }
     );
+    
+    
     localStorage.setItem("first", first);
     localStorage.setItem("oldFirst", oldFirst);
     localStorage.setItem("registryFiles", JSON.stringify(register));
