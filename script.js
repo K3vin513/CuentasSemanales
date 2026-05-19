@@ -274,6 +274,13 @@ function deleteActions(){
     // Al seleccionar "guardarFila" se muestra un mensaje de guardado y se guarda en el siguiente div
 
     if(action == "guardarFila"){
+
+        if(numFilas < 6){
+            alert("Semana Incompleta");
+            deleteTable.selectedIndex = 0;
+
+            return
+        }
         console.log("Saving file...");
         saveTable();
 
