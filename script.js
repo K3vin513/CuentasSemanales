@@ -308,9 +308,9 @@ function deleteActions(){
         while (tableBody.firstChild) {
             tableBody.removeChild(tableBody.firstChild);
         }
-    
-    }
     deleteTable.selectedIndex = 0;
+    }
+    
 
 }
 
