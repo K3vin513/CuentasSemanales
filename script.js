@@ -237,7 +237,6 @@ function deleteActions(){
             resultFinal = resultFinal - discountedTotal;
             const pasteResult = document.getElementById("finalResult");
             pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
-            localStorage.removeItem("resultFinal");
 
             localStorage.SetItem("resultFinal", resultFinal);
             localStorage.setItem("first", first);
