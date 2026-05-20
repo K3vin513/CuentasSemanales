@@ -239,6 +239,7 @@ function deleteActions(){
             pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
             localStorage.removeItem("resultFinal");
 
+            localStorage.SetItem("resultFinal", resultFinal);
             localStorage.setItem("first", first);
             localStorage.setItem("oldFirst", oldFirst);
             localStorage.setItem("registryFiles", JSON.stringify(register));
