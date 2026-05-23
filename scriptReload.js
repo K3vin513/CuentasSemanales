@@ -10,14 +10,6 @@ window.onload = function() {
         document.getElementById("titleDate").innerHTML = mesGuardado;
     }
 
-    const delButton = localStorage.getItem("deleteButton");
-
-    if (delButton === "true") {
-        console.log("Delete button is true");
-        console.log(delButton);
-        deleteButton();
-    } 
-
     recreateTable();
     if(numFilas > 0){
     first = localStorage.getItem("first");
@@ -33,7 +25,6 @@ window.onload = function() {
                             ) || 0;
     reloadFinalResult();
     }
-
 
     recreateTableSelect();
 }
@@ -150,7 +141,6 @@ function recreateSavedTable(index){
     clearTable();
     reloadFinalResultWeek(index)
 
-
     const savedTable = allTables[index];
 
     const titleDate = document.getElementById("titleSaved");
@@ -181,6 +171,9 @@ function recreateSavedTable(index){
     document.getElementById("tableSaved")
         .style.display = "table";
     aline.style.backgroundColor = "#dbedfc";
+
+        deleteButtonWeekSaved()
+
 }
 
 function recreateTable(){
@@ -205,6 +198,7 @@ function recreateTable(){
     });
     if(register.length > 0){
         deleteButton();
+        console.log("Table recreated with " + register.length + " rows.");
     }
     numFilas = register.length;
     var showTable = document.getElementById("tableFirst");
@@ -212,4 +206,56 @@ function recreateTable(){
     showTable.style.display = "table";
        }
     console.log(numFilas);
+}
+
+function deleteButtonWeekSaved(){
+
+    if(document.getElementById("deleteTableSaved")){
+        return;
     }
+ 
+    console.log("Creating delete button...");
+    const deleteTable = document.createElement("select");
+     deleteTable.id = "deleteTableSaved";
+     deleteTable.className = "fontSize";
+     deleteTable.addEventListener("change", deleteTableSaved);
+
+     deleteTable.innerHTML =  `
+                                <option value="" disabled selected hidden>...</option>
+                                <option value="eliminarSemana">Eliminar Tabla</option>
+                                `;
+
+    var child = document.getElementById("titleSaved");
+    child.appendChild(deleteTable);
+    //Cambiar fondo del div
+}
+
+function deleteTableSaved(){
+
+ const select = document.getElementById("selectTable");
+ const selectedIndex = select.value;
+ const verification = confirm("¿Estás seguro de que deseas eliminar esta tabla?");
+
+ if (!verification) {
+    deleteTable.selectedIndex = 0;
+    return;
+ }
+
+ allTables.splice(selectedIndex, 1);
+
+ localStorage.setItem(
+                      "allTablesSaved",
+                       JSON.stringify(allTables)
+                    );
+
+  clearTable();
+
+  document.getElementById("tableSaved").style.display = "none";
+
+  recreateTableSelect();
+
+  const finalResult = document.getElementById("totalWeek");
+    finalResult.textContent = "";
+
+ 
+}
