@@ -1,4 +1,6 @@
- var dia = "";
+// Variables globales que irán cambiando dependiendo de los datos que ingrese el usuario.
+
+var dia = "";
  var mes = "";
  var newMes = "";
  var first = "";
@@ -8,7 +10,7 @@
  var value = "";
  var numFilas = 0;
  var total = 0;
- var discountedTotal = 0; 
+ var discountedTotal = JSON.parse(localStorage.getItem("savedDiscountedTotal")) || 0; 
  var negativeTest = "false";
  let register = JSON.parse(
         localStorage.getItem("registryFiles")
@@ -16,7 +18,283 @@
  let registerSaved = JSON.parse(
         localStorage.getItem("filesSaved")
     ) || [];
-var resultFinal = 0;
+var resultFinal = JSON.parse(localStorage.getItem("resultFinal")) || 0;
+
+
+// Función que guarda las semanas con los datos puestos por el usuario
+
+function saveWeek(){
+
+    // Obtener el valor del input de fecha y los datos del mes y día
+    var date = document.getElementById("date").value;
+    const selectExtraHoras = document.getElementById("hours");
+    makeDay(date);
+    makeNumberDay(date);
+    testNegative();
+
+    const condition1 = value != "" 
+                       && dia != undefined 
+                       && mes != undefined 
+                       && numFilas <= 5;
+    const condition = Math.abs(first - oldFirst) == 1 
+                      && first > oldFirst  
+                      || oldFirst =="";
+
+
+
+ if(value != "" || negativeTest == "true"){
+    makeMonth(date);
+}
+
+if(negativeTest == "true"){
+    getNegative();
+    selectExtraHoras.selectedIndex = 0;
+}
+
+else{
+    
+ if(condition1){
+
+   console.log("first condition");
+   console.log(first);
+   console.log(oldFirst);
+
+  // Condicion para crear la tabla, agregar filas a la tabla y crear el botón para eliminar la tabla o eliminar la última fila. La condición se cumple si el número de filas es menor o igual a 5, se ha ingresado un valor para calcular el resultado, se ha seleccionado una fecha y las fechas son consecutivas o no hay fechas anteriores. Si se cumplen estas condiciones entonces se crea la tabla, se agregan filas a la tabla y se crea el botón para eliminar la tabla o eliminar la última fila. Si el número de filas es mayor a 5 entonces se muestra una alerta indicando que no se pueden agregar más filas a la tabla. Si no se ha ingresado un valor para calcular el resultado o no se ha seleccionado una fecha entonces se muestra una alerta indicando que se debe ingresar un valor para calcular el resultado y seleccionar una fecha antes de guardarlo en la tabla. 
+  if(condition){
+    // Crear la fila y agregarla a la tabla
+    getTable();
+    finalResult(discountedTotal);
+    selectExtraHoras.selectedIndex = 0;
+  }
+  else if(Math.abs(first - oldFirst) > 1 && oldFirst != "" || first < oldFirst){
+    alert("Las fechas no son consecutivas");
+        deleteButton();
+
+  }
+  else if(oldFirst == first){
+    alert("Las fechas no son consecutivas");
+        deleteButton();
+
+  }
+  console.log(numFilas);
+
+}
+  else if(value == "" || dia == undefined || mes == undefined){
+    alert("Ingrese una cantidad para calcular el resultado y seleccione una fecha antes de guardarlo en la tabla.");
+  }
+  else if(numFilas > 5){
+    if (dia == "Dom"){
+        getDomingo();
+    }
+    else{
+    alert("No se pueden agregar más filas a la tabla");
+        deleteButton();
+    }
+  }
+ }
+} 
+
+function makeDay(date){
+
+    const dateObj = new Date(date);
+
+    const days = [ "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+
+    dia = days[dateObj.getDay()];
+
+    return dia;
+}
+
+function makeNumberDay(date){
+
+    const [year, month, day] = date.split("-");
+
+    first = day;
+    return day;
+}
+
+
+function testNegative(){
+    negativeTest = document.getElementById("fruit").value;
+}
+
+function getNegative(){
+ 
+    var date = document.getElementById("date").value;
+    var resetDate = document.getElementById("date");
+    const selectFruit = document.getElementById("fruit");
+
+    negativeTest = document.getElementById("fruit").value;
+    console.log(negativeTest);
+    
+    console.log("Negative test is Forgiveness");
+
+    if( date != "" && numFilas == 0){
+     const deleteTable = document.createElement("select");
+     deleteTable.id = "deleteTable";
+     deleteTable.className = "fontSize";
+     deleteTable.addEventListener("change", deleteActions);
+
+     deleteTable.innerHTML =  `
+                                  <option value="" disabled selected hidden>...</option>
+                                  <option value="eliminarTodo">Eliminar Tabla</option>
+                                  <option value="eliminarFila">Eliminar Ultima Fila</option>
+                                  <option value="guardarFila">Guardar Tabla</option>
+
+                             `; 
+
+     var child = document.getElementById("titleDate");
+     child.appendChild(deleteTable);
+   }
+
+    const condition = Math.abs(first - oldFirst) == 1 &&
+                      first > oldFirst || 
+                      oldFirst == "";
+
+    const condition1 = Math.abs(first - oldFirst) > 1 &&
+                       oldFirst != "" 
+                       || first < oldFirst;
+
+    if(date != "" && numFilas <= 5 && condition){
+
+        const tableNegative = document.createElement("tr");
+         tableNegative.innerHTML = `
+                               <tbody>
+                                <th> ${dia} ${first} </th>
+                                <td> Negativo </td>
+                                <td> - </td>
+                                <td> - </td>
+                                <td> $- </td>
+                                <td> $- </td>
+                                </tbody>
+                              `;
+                            
+          var table = document.getElementById("tBody");
+          var showTable = document.getElementById("tableFirst");
+          showTable.style.display = "table";
+          table.appendChild(tableNegative);
+
+          var background = document.getElementById("father1");
+          background.style.backgroundColor = "#F0F8FF";
+
+          oldFirst = first; 
+          localStorage.setItem("first", first);
+          localStorage.setItem("oldFirst", oldFirst);
+          resetDate.value = "";
+          console.log(oldFirst);
+          numFilas++;
+          deleteButton();
+
+        saveArrays();
+        console.log("Daydreaming all the time");
+        console.log(negativeTest);
+        console.log(date.value);
+    }
+
+    else if(condition1){
+        alert("Las fechas no son consecutivas");
+    }
+
+    else if (numFilas > 5){
+        alert("No se pueden agrergar más filas a la tabla");
+        first = "";
+        oldFirst = "";
+    }
+    
+   else if (date == ""){
+    alert("Ingrese una fecha para guardar el día");
+    console.log("Moving on");
+   }
+    selectFruit.selectedIndex = 0;
+  }
+
+
+function makeMonth(date){
+    
+    const [year, month, day] = date.split("-");
+
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    mes = meses[parseInt(month) - 1];
+
+    if(mes == undefined){
+        mes = "";
+    }
+
+    var titleDate = document.getElementById("titleDate");
+    var titleDateContent = titleDate.textContent;
+    console.log("Mes: " + mes);
+
+      if (mes != "" ){
+      // Actualizar el título con el mes
+      titleDate.textContent = mes;
+      newMes = mes;
+      console.log(dia);
+      console.log(first);
+     }
+     else if (mes != newMes && mes != ""){ 
+        
+        titleDateContent = newMes + "-" + mes;
+          console.log(mes);      
+     }
+    localStorage.setItem("mes", mes);
+}
+
+
+
+function getTable(){
+
+    const fila = document.createElement("tr");
+    const extraHours = Number(document.getElementById("hours").value);
+
+      fila.innerHTML = `
+       <th></th>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+     `;
+
+    var table = document.getElementById("tBody");
+    var showTable = document.getElementById("tableFirst");
+    showTable.style.display = "table";
+    table.appendChild(fila);
+    numFilas++;
+
+    var resetDate = document.getElementById("date");
+    resetDate.value = "";
+    const showResult = document.getElementById("showResult");
+    showResult.textContent = "";
+
+    // Seleccionar los elementos de la tabla por su ID para actualizar su contenido
+    const celdas = fila.children;
+
+    extraHoursValue(discountedTotal);
+
+
+    //Rellenar las celdas con los datos correspondientes.
+    
+        celdas[0].textContent = dia + " " + first;
+        celdas[1].textContent = type;
+        celdas[2].textContent = typeFruit;
+        celdas[3].textContent = value;
+        celdas[4].textContent = "$" + Math.ceil(total);
+        celdas[5].textContent = "$" + Math.ceil(discountedTotal);
+
+    if(extraHours > 0){
+        celdas[5].textContent = "$" + Math.ceil(discountedTotal) + "*";
+    }
+
+    oldFirst = first;    
+    deleteButton();
+    saveArrays();
+    total = 0;
+    value = "";
+    console.log("Array guardado: " + JSON.stringify(register));
+  }
+
 
 function setType(result, type) {
 
@@ -128,63 +406,53 @@ else{
 }
 
 
+  function finalResult(afterDiscount){
 
-function makeMonth(date){
+    console.log("asi queda antes de la suma " + resultFinal);
+    resultFinal = resultFinal + afterDiscount;
+    const pasteResult = document.getElementById("finalResult");
     
-    const [year, month, day] = date.split("-");
 
-    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    console.log("Asi queda luego del reinicio " + afterDiscount);
+    console.log("Result final: " + resultFinal);
+    pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
+    total = 0;
 
-    mes = meses[parseInt(month) - 1];
 
-    if(mes == undefined){
-        mes = "";
-    }
+    localStorage.setItem("resultFinal", resultFinal);
+    return resultFinal;
+  }
 
-    var titleDate = document.getElementById("titleDate");
-    var titleDateContent = titleDate.textContent;
-    console.log("Mes: " + mes);
 
-      if (mes != "" ){
-      // Actualizar el título con el mes
-      titleDate.textContent = mes;
-      newMes = mes;
-      console.log(dia);
-      console.log(first);
-     }
-     else if (mes != newMes && mes != ""){ 
-        
-        titleDateContent = newMes + "-" + mes;
-          console.log(mes);      
-     }
-    localStorage.setItem("mes", mes);
+  //Al cumplires la condición de que se ha agregado una fila a la tabla, se crea un botón para eliminar la tabla o eliminar la última fila, el cual se muestra al lado del título de la tabla. Este botón se crea una sola vez y se muestra cada vez que se agrega una fila a la tabla, siempre y cuando no haya filas en la tabla. Si el número de filas es mayor a cero entonces el botón se muestra, si el número de filas es igual a cero entonces el botón se oculta.
+function deleteButton(){
+ 
+    console.log("Creating delete button...");
+    const deleteTable = document.createElement("select");
+     deleteTable.id = "deleteTable";
+     deleteTable.className = "fontSize";
+     deleteTable.addEventListener("change", deleteActions);
+
+     deleteTable.innerHTML =  `
+                                <option value="0" disabled selected hidden>...</option>
+                                <option value="eliminarTodo">Eliminar Tabla</option>
+                                <option value="eliminarFila">Eliminar Ultima Fila</option>
+                                <option value="guardarFila">Guardar Tabla</option>
+                              `; 
+
+    var child = document.getElementById("titleDate");
+    child.appendChild(deleteTable);
+    //Cambiar fondo del div
+    var background = document.getElementById("father1");
+    background.style.backgroundColor = "#F0F8FF";
 }
-function makeDay(date){
-
-    const dateObj = new Date(date);
-
-    const days = [ "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
-
-    dia = days[dateObj.getDay()];
-
-    return dia;
-}
-function makeNumberDay(date){
-
-    const [year, month, day] = date.split("-");
-
-    first = day;
-    return day;
-}
-
 
     
 function deleteActions(){
     
-    const deleteTable = document.getElementById("deleteTable");
+    const select = document.getElementById("deleteTable");
     const renoir = document.getElementById("father");
-    const action = deleteTable.value;
+    const action = select.value;
     const showSaved = document.getElementById("showSaved");
 
 
@@ -238,7 +506,7 @@ function deleteActions(){
             const pasteResult = document.getElementById("finalResult");
             pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
 
-            localStorage.SetItem("resultFinal", resultFinal);
+            localStorage.setItem("resultFinal", resultFinal);
             localStorage.setItem("first", first);
             localStorage.setItem("oldFirst", oldFirst);
             localStorage.setItem("registryFiles", JSON.stringify(register));
@@ -308,132 +576,13 @@ function deleteActions(){
         while (tableBody.firstChild) {
             tableBody.removeChild(tableBody.firstChild);
         }
-    deleteTable.selectedIndex = 0;
     }
     
+    select.selectedIndex = 0;
+    console.log("Action selected: " + action);
 
 }
 
-
-//Al cumplires la condición de que se ha agregado una fila a la tabla, se crea un botón para eliminar la tabla o eliminar la última fila, el cual se muestra al lado del título de la tabla. Este botón se crea una sola vez y se muestra cada vez que se agrega una fila a la tabla, siempre y cuando no haya filas en la tabla. Si el número de filas es mayor a cero entonces el botón se muestra, si el número de filas es igual a cero entonces el botón se oculta.
-function deleteButton(){
- 
-    if (document.getElementById("deleteTable")) {
-        return;
-    }
-    console.log("Creating delete button...");
-    const deleteTable = document.createElement("select");
-     deleteTable.id = "deleteTable";
-     deleteTable.className = "fontSize";
-     deleteTable.addEventListener("change", deleteActions);
-
-     deleteTable.innerHTML =  `
-                                <option value="" disabled selected hidden>...</option>
-                                <option value="eliminarTodo">Eliminar Tabla</option>
-                                <option value="eliminarFila">Eliminar Ultima Fila</option>
-                                <option value="guardarFila">Guardar Tabla</option>
-                              `; 
-
-    var child = document.getElementById("titleDate");
-    child.appendChild(deleteTable);
-    //Cambiar fondo del div
-    var background = document.getElementById("father1");
-    background.style.backgroundColor = "#F0F8FF";
-}
-
-function testNegative(){
-    negativeTest = document.getElementById("fruit").value;
-}
-
-function getNegative(){
- 
-    var date = document.getElementById("date").value;
-    var resetDate = document.getElementById("date");
-    const selectFruit = document.getElementById("fruit");
-
-    negativeTest = document.getElementById("fruit").value;
-    console.log(negativeTest);
-    
-    console.log("Negative test is Forgiveness");
-
-    if( date != "" && numFilas == 0){
-     const deleteTable = document.createElement("select");
-     deleteTable.id = "deleteTable";
-     deleteTable.className = "fontSize";
-     deleteTable.addEventListener("change", deleteActions);
-
-     deleteTable.innerHTML =  `
-                                  <option value="" disabled selected hidden>...</option>
-                                  <option value="eliminarTodo">Eliminar Tabla</option>
-                                  <option value="eliminarFila">Eliminar Ultima Fila</option>
-                                  <option value="guardarFila">Guardar Tabla</option>
-
-                             `; 
-
-     var child = document.getElementById("titleDate");
-     child.appendChild(deleteTable);
-   }
-
-    const condition = Math.abs(first - oldFirst) == 1 &&
-                      first > oldFirst || 
-                      oldFirst == "";
-
-    const condition1 = Math.abs(first - oldFirst) > 1 &&
-                       oldFirst != "" 
-                       || first < oldFirst;
-
-    if(date != "" && numFilas <= 5 && condition){
-
-        const tableNegative = document.createElement("tr");
-         tableNegative.innerHTML = `
-                               <tbody>
-                                <th> ${dia} ${first} </th>
-                                <td> Negativo </td>
-                                <td> - </td>
-                                <td> - </td>
-                                <td> $- </td>
-                                <td> $- </td>
-                                </tbody>
-                              `;
-                            
-          var table = document.getElementById("tBody");
-          var showTable = document.getElementById("tableFirst");
-          showTable.style.display = "table";
-          table.appendChild(tableNegative);
-
-          var background = document.getElementById("father1");
-          background.style.backgroundColor = "#F0F8FF";
-
-          oldFirst = first; 
-          localStorage.setItem("first", first);
-          localStorage.setItem("oldFirst", oldFirst);
-          resetDate.value = "";
-          console.log(oldFirst);
-          numFilas++;
-          deleteButton();
-
-        saveArrays();
-        console.log("Daydreaming all the time");
-        console.log(negativeTest);
-        console.log(date.value);
-    }
-
-    else if(condition1){
-        alert("Las fechas no son consecutivas");
-    }
-
-    else if (numFilas > 5){
-        alert("No se pueden agrergar más filas a la tabla");
-        first = "";
-        oldFirst = "";
-    }
-    
-   else if (date == ""){
-    alert("Ingrese una fecha para guardar el día");
-    console.log("Moving on");
-   }
-    selectFruit.selectedIndex = 0;
-  }
 
   function saveArrays(){
 
@@ -486,60 +635,10 @@ function getNegative(){
     localStorage.setItem("oldFirst", oldFirst);
     localStorage.setItem("registryFiles", JSON.stringify(register));
     localStorage.setItem("totalSavedWeek", resultFinal );
+    localStorage.setItem("savedDiscountedTotal", discountedTotal);
+
  }
 
-
-  function getTable(){
-
-    const fila = document.createElement("tr");
-    const extraHours = Number(document.getElementById("hours").value);
-
-      fila.innerHTML = `
-       <th></th>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-     `;
-
-    var table = document.getElementById("tBody");
-    var showTable = document.getElementById("tableFirst");
-    showTable.style.display = "table";
-    table.appendChild(fila);
-    numFilas++;
-
-    var resetDate = document.getElementById("date");
-    resetDate.value = "";
-    const showResult = document.getElementById("showResult");
-    showResult.textContent = "";
-
-    // Seleccionar los elementos de la tabla por su ID para actualizar su contenido
-    const celdas = fila.children;
-
-    extraHoursValue(discountedTotal);
-
-
-    //Rellenar las celdas con los datos correspondientes.
-    
-        celdas[0].textContent = dia + " " + first;
-        celdas[1].textContent = type;
-        celdas[2].textContent = typeFruit;
-        celdas[3].textContent = value;
-        celdas[4].textContent = "$" + Math.ceil(total);
-        celdas[5].textContent = "$" + Math.ceil(discountedTotal);
-
-    if(extraHours > 0){
-        celdas[5].textContent = "$" + Math.ceil(discountedTotal) + "*";
-    }
-
-    oldFirst = first;    
-    deleteButton();
-    saveArrays();
-    total = 0;
-    value = "";
-    console.log("Array guardado: " + JSON.stringify(register));
-  }
 
   function getDomingo(){
 
@@ -595,90 +694,3 @@ function getNegative(){
     console.log("Array guardado: " + JSON.stringify(register));
   }
 
-  function finalResult(afterDiscount){
-
-    console.log("asi queda antes de la suma " + resultFinal);
-    resultFinal = resultFinal + afterDiscount;
-    const pasteResult = document.getElementById("finalResult");
-    
-
-    console.log("Asi queda luego del reinicio " + afterDiscount);
-    console.log("Result final: " + resultFinal);
-    pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
-    total = 0;
-
-
-    localStorage.setItem("resultFinal", resultFinal);
-    return resultFinal;
-  }
-
-function makeWeek(){
-
-    // Obtener el valor del input de fecha y los datos del mes y día
-    var date = document.getElementById("date").value;
-    const selectExtraHoras = document.getElementById("hours");
-    makeDay(date);
-    makeNumberDay(date);
-    testNegative();
-
-    const condition1 = value != "" 
-                       && dia != undefined 
-                       && mes != undefined 
-                       && numFilas <= 5;
-    const condition = Math.abs(first - oldFirst) == 1 
-                      && first > oldFirst  
-                      || oldFirst =="";
-
-
-
- if(value != "" || negativeTest == "true"){
-    makeMonth(date);
-}
-
-if(negativeTest == "true"){
-    getNegative();
-    selectExtraHoras.selectedIndex = 0;
-}
-
-else{
-    
- if(condition1){
-
-   console.log("first condition");
-   console.log(first);
-   console.log(oldFirst);
-
-  // Condicion para crear la tabla, agregar filas a la tabla y crear el botón para eliminar la tabla o eliminar la última fila. La condición se cumple si el número de filas es menor o igual a 5, se ha ingresado un valor para calcular el resultado, se ha seleccionado una fecha y las fechas son consecutivas o no hay fechas anteriores. Si se cumplen estas condiciones entonces se crea la tabla, se agregan filas a la tabla y se crea el botón para eliminar la tabla o eliminar la última fila. Si el número de filas es mayor a 5 entonces se muestra una alerta indicando que no se pueden agregar más filas a la tabla. Si no se ha ingresado un valor para calcular el resultado o no se ha seleccionado una fecha entonces se muestra una alerta indicando que se debe ingresar un valor para calcular el resultado y seleccionar una fecha antes de guardarlo en la tabla. 
-  if(condition){
-    // Crear la fila y agregarla a la tabla
-    getTable();
-    finalResult(discountedTotal);
-    selectExtraHoras.selectedIndex = 0;
-  }
-  else if(Math.abs(first - oldFirst) > 1 && oldFirst != "" || first < oldFirst){
-    alert("Las fechas no son consecutivas");
-        deleteButton();
-
-  }
-  else if(oldFirst == first){
-    alert("Las fechas no son consecutivas");
-        deleteButton();
-
-  }
-  console.log(numFilas);
-
-}
-  else if(value == "" || dia == undefined || mes == undefined){
-    alert("Ingrese una cantidad para calcular el resultado y seleccione una fecha antes de guardarlo en la tabla.");
-  }
-  else if(numFilas > 5){
-    if (dia == "Dom"){
-        getDomingo();
-    }
-    else{
-    alert("No se pueden agregar más filas a la tabla");
-        deleteButton();
-    }
-  }
- }
-} 
