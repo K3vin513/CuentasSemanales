@@ -45,7 +45,7 @@ function reloadFinalResultWeek(index){
 
     selectedTable.tabla.forEach(item => {
 
-        totalSemana += Number(
+        totalSemana += parseFloat(
             item.discountedTotal
         ) || 0;
     });
