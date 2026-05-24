@@ -75,6 +75,10 @@ function saveTable(){
     localStorage.removeItem("oldFirst");
     localStorage.setItem("deleteButton", "false");
     localStorage.setItem("allTablesSaved", JSON.stringify(allTables));
+    const semanaAnteriorCopia = localStorage.getItem("semanaActual") || 0;
+    localStorage.setItem("semanaAnterior", semanaAnteriorCopia);
+    localStorage.removeItem("semanaActual");
+    console.log(localStorage.getItem("semanaAnterior"));
 }
 
 function makeTableSelect(){
@@ -240,7 +244,7 @@ function deleteTableSaved(){
  const select = document.getElementById("selectTable");
  const selectDelete = document.getElementById("deleteTableSaved");
  const selectIndex = select.value;
- const verification = confirm("¿Estás seguro de que deseas eliminar esta tabla?");
+ const verification = confirm("¿Está seguro de que quiere eliminar esta tabla?");
 
  if (!verification) {
     selectDelete.selectedIndex = "initialSelect";
@@ -265,4 +269,11 @@ function deleteTableSaved(){
 
     selectDelete.selectedIndex = "initialSelect";
  
+}
+
+function Presentismo(){
+
+    const semanaAnterior = parseFloat(localStorage.getItem("semanaAnterior")) || 0;
+    const semanaActual = parseFloat(localStorage.getItem("semanaActual")) || 0;
+
 }
