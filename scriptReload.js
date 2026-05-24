@@ -43,12 +43,17 @@ function reloadFinalResultWeek(index){
     const selectedTable = allTables[index];
     let totalSemana = 0;
 
+
     selectedTable.tabla.forEach(item => {
 
         totalSemana += parseFloat(
             item.discountedTotal
         ) || 0;
     });
+
+    if(totalSemana > 9420 ){
+        totalSemana = discountsFinal(totalSemana);
+    }
 
     pasteResult.textContent = "Total: $" + Math.ceil(totalSemana);
 
@@ -221,7 +226,7 @@ function deleteButtonWeekSaved(){
      deleteTable.addEventListener("change", deleteTableSaved);
 
      deleteTable.innerHTML =  `
-                                <option value="" disabled selected hidden>...</option>
+                                <option value="initialSelect" disabled selected hidden>...</option>
                                 <option value="eliminarSemana">Eliminar Tabla</option>
                                 `;
 
@@ -233,15 +238,16 @@ function deleteButtonWeekSaved(){
 function deleteTableSaved(){
 
  const select = document.getElementById("selectTable");
- const selectedIndex = select.value;
+ const selectDelete = document.getElementById("deleteTableSaved");
+ const selectIndex = select.value;
  const verification = confirm("¿Estás seguro de que deseas eliminar esta tabla?");
 
  if (!verification) {
-    deleteTable.selectedIndex = 0;
+    selectDelete.selectedIndex = "initialSelect";
     return;
  }
 
- allTables.splice(selectedIndex, 1);
+ allTables.splice(selectIndex, 1);
 
  localStorage.setItem(
                       "allTablesSaved",
@@ -257,5 +263,6 @@ function deleteTableSaved(){
   const finalResult = document.getElementById("totalWeek");
     finalResult.textContent = "";
 
+    selectDelete.selectedIndex = "initialSelect";
  
 }
