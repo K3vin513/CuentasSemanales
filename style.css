@@ -102,7 +102,7 @@ th, td{
   padding-left: 0px;
   color: rgb(0, 0, 0);
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 30px;
   margin-bottom: 5px;
     border: 1px solid black;
@@ -119,14 +119,14 @@ th, td{
 }
 .discountsSize{
   line-height: 10px;
-  font-size: 11px;
+  font-size: 13px;
   padding-left: 10px;
 
 }
 .selectSize{
   width: 33px;
   height: 20px;
-  font-size: 11px;
+  font-size: 13px;
 }
 #buttonDiscounts{
   margin-left: 27%;
