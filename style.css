@@ -118,16 +118,21 @@ th, td{
   border: 1px solid black;
 }
 .discountsSize{
+  font-family: "Akt", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   line-height: 10px;
+  padding-right: 5px;
   font-size: 13px;
   padding-left: 10px;
 
 }
 .selectSize{
-  width: 33px;
+  width: auto;
   height: 20px;
   font-size: 13px;
 }
 #buttonDiscounts{
   margin-left: 27%;
 }
+    
