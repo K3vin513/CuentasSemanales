@@ -90,9 +90,44 @@ th, td{
     height: 20px;
     margin-left: 70%;
 }
-
 #deleteTableSaved{
     width: 35px;
     height: 20px;
     margin-left: 70%;
+}
+
+#titleDiscounts{
+  font-family: Arial, sans-serif;
+  background-color: rgb(169, 93, 93);
+  padding-left: 0px;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  font-size: 20px;
+  line-height: 30px;
+  margin-bottom: 5px;
+    border: 1px solid black;
+
+}
+#descuentos{
+  position: absolute;
+  background-color: white;
+  width: auto;
+  height: auto;
+  border-collapse: collapse;
+  display: none;
+  border: 1px solid black;
+}
+.discountsSize{
+  line-height: 10px;
+  font-size: 11px;
+  padding-left: 10px;
+
+}
+.selectSize{
+  width: 33px;
+  height: 20px;
+  font-size: 11px;
+}
+#buttonDiscounts{
+  margin-left: 27%;
 }
