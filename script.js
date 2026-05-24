@@ -384,7 +384,7 @@ if(negativeTest == "true"){
     return;
 }
 else{
-   if (value === "" || value < 0) {
+   if (value === "" || value < 0 || isNaN(value)) {
     alert("Ingrese un número válido para la cantidad.");
     return;
    }
@@ -449,6 +449,8 @@ function finalResult(){
 
         pasteResult.textContent = "Total: $" + Math.ceil(totalSemana);
         localStorage.setItem("resultFinal", totalSemana);
+        localStorage.setItem("semanaActual", totalSemana);
+        console.log(localStorage.getItem("resultFinal"));
 
 
 }
