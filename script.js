@@ -694,3 +694,21 @@ function deleteActions(){
     console.log("Array guardado: " + JSON.stringify(register));
   }
 
+  function showDiscounts(){
+
+  const discounts = document.getElementById("descuentos");
+  discounts.style.display = "block";
+
+  const button = document.getElementById("buttonShowDiscounts");
+  button.style.display = "none";
+}
+
+function calcularDescuentos(){
+
+  const discounts = document.getElementById("descuentos");
+
+  discounts.style.display = "none";
+
+  const button = document.getElementById("buttonShowDiscounts");
+  button.style.display = "inline-block";
+}
