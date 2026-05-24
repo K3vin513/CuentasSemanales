@@ -63,7 +63,7 @@ else{
   if(condition){
     // Crear la fila y agregarla a la tabla
     getTable();
-    finalResult(discountedTotal);
+    finalResult();
     selectExtraHoras.selectedIndex = 0;
   }
   else if(Math.abs(first - oldFirst) > 1 && oldFirst != "" || first < oldFirst){
@@ -405,8 +405,56 @@ else{
   }
 }
 
+function discountsFinal(resultFinalEspecial){
 
-  function finalResult(afterDiscount){
+    const menores = localStorage.getItem("descuentoHijos");
+    const matrimonio = localStorage.getItem("matrimonio");
+    const concubinato = localStorage.getItem("concubinato");
+    const manutención = localStorage.getItem("manutención");
+
+    alert("Aplicando descuentos finales...");
+
+    if(menores == 0 && matrimonio == "negativo" && concubinato == "negativo" && manutención == "negativo"){
+        return (resultFinalEspecial * 0.985);
+    }
+
+    if(menores > 0 && (matrimonio == "positivo" || concubinato == "positivo")){
+        return resultFinalEspecial * 0.95;
+    }
+
+    if (menores > 0){
+        return resultFinalEspecial * 0.97;
+    }
+
+    if( matrimonio == "positivo" || concubinato == "positivo"){
+            return resultFinalEspecial * 0.965;
+    }
+        
+}
+
+function finalResult(){
+
+    const pasteResult = document.getElementById("finalResult");
+    let totalSemana = 0;
+    register.forEach(item => {
+
+        totalSemana += parseFloat(
+            item.discountedTotal
+        ) || 0;
+    });
+
+    if(totalSemana > 9420 && numFilas >= 6){
+        totalSemana = discountsFinal(totalSemana);
+    }
+
+        pasteResult.textContent = "Total: $" + Math.ceil(totalSemana);
+        localStorage.setItem("resultFinal", totalSemana);
+
+
+}
+
+
+  /*function finalResult(afterDiscount){
 
     console.log("asi queda antes de la suma " + resultFinal);
     resultFinal = resultFinal + afterDiscount;
@@ -415,6 +463,9 @@ else{
 
     console.log("Asi queda luego del reinicio " + afterDiscount);
     console.log("Result final: " + resultFinal);
+    if(resultFinal > 9420 && numFilas >= 5){
+        resultFinal = discountsFinal(resultFinal);
+    }
     pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
     total = 0;
 
@@ -422,7 +473,7 @@ else{
     localStorage.setItem("resultFinal", resultFinal);
     return resultFinal;
   }
-
+*/
 
   //Al cumplires la condición de que se ha agregado una fila a la tabla, se crea un botón para eliminar la tabla o eliminar la última fila, el cual se muestra al lado del título de la tabla. Este botón se crea una sola vez y se muestra cada vez que se agrega una fila a la tabla, siempre y cuando no haya filas en la tabla. Si el número de filas es mayor a cero entonces el botón se muestra, si el número de filas es igual a cero entonces el botón se oculta.
 function deleteButton(){
@@ -501,10 +552,7 @@ function deleteActions(){
             oldFirst--;
             register.pop();
             result = 0;
-            
-            resultFinal = resultFinal - discountedTotal;
-            const pasteResult = document.getElementById("finalResult");
-            pasteResult.textContent = "Total: $" + Math.ceil(resultFinal);
+            finalResult();
 
             localStorage.setItem("resultFinal", resultFinal);
             localStorage.setItem("first", first);
@@ -703,9 +751,21 @@ function deleteActions(){
   button.style.display = "none";
 }
 
-function calcularDescuentos(){
+function guardarDescuentos(){
 
   const discounts = document.getElementById("descuentos");
+
+  const menores = document.getElementById("descuentoHijos").value;
+  const matrimonio = document.getElementById("matrimonio").value;
+  const concubinato = document.getElementById("concubinato").value;
+  const manutención = document.getElementById("manutencion").value;
+
+  localStorage.setItem("descuentoHijos", menores);
+  localStorage.setItem("matrimonio", matrimonio);
+  localStorage.setItem("concubinato", concubinato);
+  localStorage.setItem("manutención", manutención);
+
+  console.log("Descuentos ingresados: " + menores + ", " + matrimonio + ", " + concubinato + ", " + manutención);
 
   discounts.style.display = "none";
 
