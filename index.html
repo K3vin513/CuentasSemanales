@@ -46,15 +46,8 @@
             <input type="date" id="date" class="fontSize"/>
             <button id="button" class="fontSize" onclick="saveWeek()">Guardar</button>
 
-            <p class="fontResult">Menores a cargo
-               <select id ="kids">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-               </select>
+            <p class="fontResult">
+               <button id="buttonShowDiscounts" onclick="showDiscounts()">Descuentos</button>
                Horas Extras
                <select id ="hours">
                     <option value="0">0</option>
@@ -64,6 +57,45 @@
                     <option value="2">2</option>
                </select>
             </p>
+  <div id="descuentos">
+
+    <p id="titleDiscounts">Descuentos</p>
+
+    <p class="discountsSize">Menores a cargo
+    <select id="descuentoHijos" class="selectSize">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+
+
+    </select> 
+    </p>
+
+    <p class="discountsSize">Matrimonio
+    <select id="matrimonio" class="selectSize">
+      <option value="Positivo">No</option>
+      <option value="Negativo">Si</option>
+    </p>
+    </select> 
+
+    <p class="discountsSize">Concubinato
+    <select id="Concubinato" class="selectSize">
+      <option value="Positivo">No</option>
+      <option value="Negativo">Si</option>
+    </select> 
+    </p>
+
+    <p class="discountsSize">Manutención
+    <select id="manutencion" class="selectSize" >
+      <option value="Positivo">No</option>
+      <option value="Negativo">Si</option>
+    </select> 
+    </p>
+    <button id="buttonDiscounts" class="fontSize" onclick="calcularDescuentos()">Guardar</button>
+  </div>
             
         </div>
     </div>   
