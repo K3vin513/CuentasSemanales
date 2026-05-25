@@ -407,20 +407,23 @@ else{
 
 function discountsFinal(resultFinalEspecial){
 
-    const menores = localStorage.getItem("descuentoHijos");
+    const menores = Number(localStorage.getItem("descuentoHijos"));
     const matrimonio = localStorage.getItem("matrimonio");
     const concubinato = localStorage.getItem("concubinato");
     const manutención = localStorage.getItem("manutención");
 
     alert("Aplicando descuentos finales...");
 
+    console.log("Descuentos aplicados: " + menores + ", " + matrimonio + ", " + concubinato + ", " + manutención);
+
     if(menores == 0 && matrimonio == "negativo" && concubinato == "negativo" && manutención == "negativo"){
         return (resultFinalEspecial * 0.985);
+        alert("No se aplican descuentos finales");
     }
 
     if(menores > 0 && (matrimonio == "positivo" || concubinato == "positivo")){
         return resultFinalEspecial * 0.95;
-    }
+    } 
 
     if (menores > 0){
         return resultFinalEspecial * 0.97;
@@ -432,9 +435,16 @@ function discountsFinal(resultFinalEspecial){
         
 }
 
+function Manutencion(resultFinalEspecial){
+
+    resultFinalEspecial = resultFinalEspecial * 0.80;
+    return resultFinalEspecial;
+}
+
 function finalResult(){
 
     const pasteResult = document.getElementById("finalResult");
+    const manutención = localStorage.getItem("manutención");
     let totalSemana = 0;
     register.forEach(item => {
 
@@ -445,6 +455,12 @@ function finalResult(){
 
     if(totalSemana > 9420 && numFilas >= 6){
         totalSemana = discountsFinal(totalSemana);
+    }
+
+    console.log(manutención);
+
+    if(manutención == "positivo"){
+        totalSemana = Manutencion(totalSemana);
     }
 
         pasteResult.textContent = "Total: $" + Math.ceil(totalSemana);
