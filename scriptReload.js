@@ -26,7 +26,28 @@ window.onload = function() {
     reloadFinalResult();
     }
 
+    recreateDiscounts();
     recreateTableSelect();
+}
+
+function recreateDiscounts(){
+
+    const matrimonio = localStorage.getItem("matrimonio");
+    const concubinato = localStorage.getItem("concubinato");
+    const manutención = localStorage.getItem("manutención");
+    const descuentoHijos = localStorage.getItem("descuentoHijos");
+
+    const selectHijos = document.getElementById("descuentoHijos");
+    selectHijos.value = descuentoHijos;
+
+    const selectMatrimonio = document.getElementById("matrimonio");
+    selectMatrimonio.value = matrimonio;
+
+    const selectConcubinato = document.getElementById("concubinato");
+    selectConcubinato.value = concubinato;
+
+    const selectManutención = document.getElementById("manutencion");
+    selectManutención.value = manutención;
 }
 
 function reloadFinalResult(){
