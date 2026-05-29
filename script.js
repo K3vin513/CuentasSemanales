@@ -407,7 +407,7 @@ else{
 
 function discountsFinal(resultFinalEspecial){
 
-    const menores = Number(localStorage.getItem("descuentoHijos"));
+    const menores = localStorage.getItem("descuentoHijos");
     const matrimonio = localStorage.getItem("matrimonio");
     const concubinato = localStorage.getItem("concubinato");
     const manutención = localStorage.getItem("manutención");
