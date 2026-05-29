@@ -416,16 +416,16 @@ function discountsFinal(resultFinalEspecial){
 
     console.log("Descuentos aplicados: " + menores + ", " + matrimonio + ", " + concubinato + ", " + manutención);
 
-    if(menores == 0 && matrimonio == "negativo" && concubinato == "negativo" && manutención == "negativo"){
+    if(menores == "negativo" && matrimonio == "negativo" && concubinato == "negativo" && manutención == "negativo"){
         return (resultFinalEspecial * 0.985);
         alert("No se aplican descuentos finales");
     }
 
-    if(menores > 0 && (matrimonio == "positivo" || concubinato == "positivo")){
+    if(menores == "positivo" && (matrimonio == "positivo" || concubinato == "positivo")){
         return resultFinalEspecial * 0.95;
     } 
 
-    if (menores > 0){
+    if (menores == "positivo" ){
         return resultFinalEspecial * 0.97;
     }
 
